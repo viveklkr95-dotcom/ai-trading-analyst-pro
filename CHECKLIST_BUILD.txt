@@ -1,0 +1,212 @@
+# Known Issues & Limitations
+
+## Current Status: MVP (Demo Mode)
+
+The app is a fully functional MVP running in demo mode only. All market data is simulated and for educational purposes.
+
+---
+
+## Known Issues
+
+### 1. Market Data is Simulated
+**Status**: By Design
+**Description**: All candles and prices are algorithmically generated.
+**Impact**: Signals do not reflect real market conditions.
+**Workaround**: Configure a live market data provider (Binance, Alpha Vantage, etc.)
+**Timeline**: Pre-production; must be integrated before live trading.
+
+### 2. Chart Screenshot Analysis Not Implemented
+**Status**: UI Complete, Backend Missing
+**Description**: Upload area is present but vision model integration is not yet coded.
+**Impact**: Uploaded screenshots are not analyzed; just shows the filename.
+**Workaround**: Manually read chart and enter values.
+**Timeline**: Add OpenAI Vision API integration in next release.
+
+### 3. No Persistent Paper Trading History
+**Status**: UI Complete, Backend Missing
+**Description**: Trade journal shows mock entries; no real trade history storage.
+**Impact**: Trades are not saved; page refresh clears data.
+**Workaround**: Use external notebook to track trades.
+**Timeline**: Add SQLite/PostgreSQL backend for trade storage.
+
+### 4. Alerts Not Fully Functional
+**Status**: Partially Implemented
+**Description**: UI shows alert sections; browser notification and sound logic needs backend subscription.
+**Impact**: Price alerts and signal notifications do not trigger.
+**Workaround**: Manual monitoring of the dashboard.
+**Timeline**: Add WebSocket/polling and browser notification service.
+
+### 5. Single Timeframe Analysis Only
+**Status**: By Design (MVP)
+**Description**: Signal is based on single timeframe; does not confirm multi-timeframe trends.
+**Impact**: May miss key invalidations from higher timeframes.
+**Workaround**: Manually check multiple timeframes.
+**Timeline**: Extend signal logic to accept multi-timeframe input.
+
+### 6. No Backtesting Framework
+**Status**: Not Implemented
+**Description**: Historical testing on strategies not available.
+**Impact**: Cannot validate signal accuracy over past data.
+**Workaround**: Use external backtesting tools (TradingView, MetaTrader).
+**Timeline**: Add `/app/api/backtest/` endpoints and visualization.
+
+### 7. Bullish/Bearish Bias in Signal Generation
+**Status**: Known Limitation
+**Description**: Signal engine favors bullish signals more often than bearish ones due to scoring logic.
+**Impact**: May miss short opportunities.
+**Workaround**: Manually invert analysis for short trades.
+**Timeline**: Rebalance scoring weights in next version.
+
+### 8. No Real Account Integration
+**Status**: By Design
+**Description**: No broker API integration; cannot execute real trades.
+**Impact**: No live trading capability.
+**Workaround**: Use manual order entry on broker platform.
+**Timeline**: Add broker APIs (Alpaca, Interactive Brokers, Binance) for paper/live trading.
+
+### 9. Mobile UI: Landscape Mode Cramped
+**Status**: Minor UX Issue
+**Description**: On mobile landscape, chart and sidebars overlap slightly.
+**Impact**: Difficult to read on small screens in landscape.
+**Workaround**: Use portrait mode or desktop.
+**Timeline**: Optimize layout breakpoints for landscape.
+
+### 10. No Data Caching
+**Status**: Performance
+**Description**: Every page load regenerates demo candles; no memoization across requests.
+**Impact**: Slight delay on slower networks.
+**Workaround**: None; acceptable for MVP.
+**Timeline**: Add Redis caching layer for production.
+
+---
+
+## Limitations (By Design)
+
+### Demo Mode Only
+- All prices are simulated
+- No real market data by default
+- No guaranteed accuracy
+- Educational use only
+
+### No Real-Money Features
+- Live trading is disabled
+- Order execution is not available
+- No broker connection
+- No account synchronization
+
+### Limited Asset Coverage
+- Only 9 symbols hardcoded (BTC, ETH, EUR/USD, GBP/USD, USD/JPY, XAU/USD, RELIANCE, TCS, NIFTY50)
+- Adding symbols requires code changes
+- No dynamic symbol import
+
+### Indicator Scope
+- Limited to EMA, RSI, MACD, VWAP, Bollinger Bands, ATR
+- No Ichimoku, Stochastic, Williams %R, etc.
+- No custom indicator support
+
+---
+
+## Browser Compatibility
+
+### Supported
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+### Not Supported
+- IE 11 (EOL)
+- Mobile browsers without ES2020 support
+
+### Known Issues by Browser
+- Safari: Slight lag on chart resize (lightweight-charts limitation)
+- Firefox: Notification API may require additional permissions
+
+---
+
+## Performance Issues
+
+### Slow Chart Rendering
+**Cause**: Generating 160 candles on every symbol/timeframe change
+**Solution**: Implement caching or request debouncing
+
+### High Memory Usage
+**Cause**: Keeping all historical data in memory
+**Solution**: Lazy-load only visible candles
+
+### Slow on Slow Networks
+**Cause**: No data compression
+**Solution**: Add gzip compression and CDN caching
+
+---
+
+## Security Notes
+
+### Current State
+- No authentication (public demo)
+- No authorization checks
+- No rate limiting
+- No CSRF protection (could add if needed)
+
+### Before Production
+- Add user authentication (Auth0, Clerk, NextAuth.js)
+- Add rate limiting (Redis + middleware)
+- Validate all API inputs
+- Store API keys securely (never in code)
+- Enable HTTPS only
+- Add security headers (CSP, X-Frame-Options)
+
+---
+
+## Data Privacy
+
+- No personal data is collected
+- No cookies are set
+- No tracking (except Next.js analytics if enabled)
+- All computation is client-side (except demo candle generation)
+
+---
+
+## Roadmap (Planned Fixes)
+
+### v0.2.0 (Next Release)
+- [ ] Live market data integration (Binance, Alpha Vantage)
+- [ ] Screenshot chart vision analysis
+- [ ] Persistent trade journal (SQLite)
+- [ ] Working price alerts with browser notifications
+- [ ] Multi-timeframe confirmation
+- [ ] Better signal scoring logic
+
+### v0.3.0
+- [ ] Backtesting framework
+- [ ] Broker API integration (Alpaca, IB)
+- [ ] Real account paper trading
+- [ ] Custom indicator builder
+- [ ] User authentication
+- [ ] Database optimization
+
+### v1.0.0
+- [ ] Live trading (with extreme caution and warnings)
+- [ ] Advanced backtesting
+- [ ] Automated strategy deployment
+- [ ] Mobile app (React Native)
+- [ ] Community signal sharing
+- [ ] Risk management suite
+
+---
+
+## Reporting Issues
+
+If you find a bug not listed here:
+1. Open a GitHub issue with reproduction steps
+2. Include browser, OS, and Node.js version
+3. Attach error screenshots if possible
+4. Describe expected vs. actual behavior
+
+---
+
+## Questions?
+
+For setup questions, see `SETUP.md`
+For deployment, see `DEPLOYMENT.md`
+For API docs, see `API.md` (coming soon)
